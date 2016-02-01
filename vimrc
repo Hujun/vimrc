@@ -3,15 +3,31 @@
 " General Settings
 "================================
 
+" IMPORTANT
+" change lead key
+let mapleader = ','
+let g:mapleader = ','
+
 syntax on
+
+" TODO: install bundle
 
 set history=2000
 
 filetype on
+" enable indent based on file type detection
 filetype indent on
+" enable plugin
 filetype plugin on
+" ensure file type detection works by  including this after bundle
+" installation
 filetype plugin indent on
 
+" uncomment following line and comment nobackup
+" if need backup file
+" set backup
+" set backupext=.bak
+" set backupdir=/tmp/bimbk
 " no backup file
 set nobackup
 " no swap file
@@ -22,6 +38,8 @@ set viminfo^=%
 
 " for regular expressions turn magic on
 set magic
+
+set autoread
 
 "================================
 " Display Settings
