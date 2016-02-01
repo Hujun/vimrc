@@ -160,3 +160,14 @@ if has("autocmd")
         autocmd Syntax * call matchadd('Debug', '\W\zs\(NOTE\|INFO\|IDEA\|NOTICE\)')
     endif
 endif
+
+"===============================
+" Theme Settings
+"===============================
+
+set background=dark
+set t_Co=256
+
+" colorscheme solarized
+" colorscheme molokai
+" colorscheme desert
