@@ -259,7 +259,7 @@ nnoremap <silent> * *zz
 nnoremap <silent> # #zz
 nnoremap <silent> g* g*zz
 " remove search highlight
-noremap <silent><lead>/ :nohls<CR>
+noremap <silent><leader>/ :nohls<CR>
 
 " switch # *
 " nnoremap # *
