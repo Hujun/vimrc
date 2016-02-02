@@ -40,6 +40,14 @@ set autoread
 
 set title
 
+" 设置 退出vim后，内容显示在终端屏幕, 可以用于查看和复制, 不需要可以去掉
+" 好处：误删什么的，如果以前屏幕打开，可以找回
+set t_ti= t_te=
+
+" Configure backspace so it acts as it should act
+set backspace=eol,start,indent
+set whichwrap+=<,>,h,l
+
 "================================
 " Display Settings
 "================================
@@ -108,6 +116,31 @@ function! NumberToggle()
     endif
 endfunc
 nnoremap <C-n> :call NumberToggle()<cr>
+
+
+" 代码折叠
+set foldenable
+" 折叠方法
+" manual    手工折叠
+" indent    使用缩进表示折叠
+" expr      使用表达式定义折叠
+" syntax    使用语法定义折叠
+" diff      对没有更改的文本进行折叠
+" marker    使用标记进行折叠, 默认标记是 {{{ 和 }}}
+set foldmethod=indent
+set foldlevel=99
+" 代码折叠自定义快捷键 <leader>zz
+let g:FoldMethod = 0
+map <leader>zz :call ToggleFold()<cr>
+fun! ToggleFold()
+    if g:FoldMethod == 0
+        exe "normal! zM"
+        let g:FoldMethod = 1
+    else
+        exe "normal! zR"
+        let g:FoldMethod = 0
+    endif
+endfun
 
 "===============================
 " File Encode Settings
@@ -262,8 +295,11 @@ nnoremap <silent> g* g*zz
 noremap <silent><leader>/ :nohls<CR>
 
 " switch # *
-" nnoremap # *
-" nnoremap * #
+nnoremap # *
+nnoremap * #
+
+" for # indent, python文件中输入新行时#号注释不切回行首
+autocmd BufNewFile,BufRead *.py inoremap # X<c-h>#
 
 " tab swtich
 map <leader>th :tabfirst<cr>
@@ -319,6 +355,13 @@ nmap <silent> <leader>sv :so $MYVIMRC<CR>
 
 " w!! to sudo & write a file
 cmap w!! w !sudo tee >/dev/null %
+
+" 调整缩进后自动选中，方便再次操作
+vnoremap < <gv
+vnoremap > >gv
+
+" select all
+map <Leader>sa ggVG"
 
 "===============================
 " Others
