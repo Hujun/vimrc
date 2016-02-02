@@ -9,11 +9,8 @@ let mapleader = ','
 let g:mapleader = ','
 
 syntax on
-
 " TODO: install bundle
-
-set history=2000
-
+set history=2000 
 filetype on
 " enable indent based on file type detection
 filetype indent on
@@ -41,6 +38,8 @@ set magic
 
 set autoread
 
+set title
+
 "================================
 " Display Settings
 "================================
@@ -66,6 +65,15 @@ set nowrap
 set showmatch
 " how many thenths of second to blink when matching brackets
 set matchtime=2
+
+" search text highlight
+set hlsearch
+" increasement search, instant search with input
+set incsearch
+" case insensitive when search
+set ignorecase
+" case sensitive when there is more than one upcase
+set smartcase
 
 " indent config
 set smartindent
@@ -120,29 +128,6 @@ set formatoptions+=m
 set formatoptions+=B
 
 "===============================
-" Others
-"===============================
-
-" auto reload vimrc when it is modified (Windows)
-autocmd! bufwritepost _vimrc source %
-" auto reload vimrc when it is modified (Linux)
-autocmd! bufwritepost .vimrc source %
-
-" auto complete for vimrc config
-" see VimTip1228
-set completeopt=longest,menu
-
-" 增强模式中的命令行自动完成操作
-set wildmenu
-" ignore compiled files
-set wildignore=*.o,*~,*.pyc,*.class
-
-" 打开自动定位到最后编辑的位置, 需要确认 .viminfo 当前用户可写
-if has("autocmd")
-    au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-endif
-
-"===============================
 " File Type Settings
 "===============================
 
@@ -189,3 +174,172 @@ set t_Co=256
 " colorscheme solarized
 " colorscheme molokai
 " colorscheme desert
+
+"===============================
+" Hotkey Settings
+"===============================
+
+" quick enter command mode by mapping ; to :
+nnoremap ; :
+
+" treat long lines as break lines (useful when moving around in them)
+nnoremap k gk
+nnoremap gk k
+nnoremap j gj
+nnoremap gj j
+
+" smart way to move between windows
+map <C-j> <C-W>j
+map <C-k> <C-W>k
+map <C-h> <C-W>h 
+map <C-l> <C-W>l 
+
+" easy way to go to start and end of line
+noremap H ^
+noremap L $
+
+" command mode enhancement, Ctrl-a to start of line, Ctrl-e to end of line
+cnoremap <C-j> <t_kd>
+cnoremap <C-k> <t_ku>
+cnoremap <C-a> <Home>
+cnoremap <C-e> <End>
+
+" F1 ~ F6 settings
+
+" disable F1 to avoid vim system help
+noremap <F1> <Esc>
+
+" F2 行号开关，用于鼠标复制代码用
+" 为方便复制，用<F2>开启/关闭行号显示:
+function! HideNumber()
+    if(&relativenumber == &number)
+        set relativenumber! number!
+    elseif(&number)
+        set number!
+    else
+        set relativenumber!
+    endif
+    set number?
+endfunc
+nnoremap <F2> :call HideNumber()<CR>
+
+" F3 显示可打印字符开关
+nnoremap <F3> :set list! list?<CR>
+
+" F4 换行开关
+nnoremap <F4> :set wrap! wrap?<CR>
+
+" when in insert mode, press <F5> to go to paste mode
+" where you can paste mass data that won't be autoindented
+set pastetoggle=<F5>
+" disable paste mode when leaving insert mode
+au InsertLeave * set nopaste
+" auto set paste mode when pasting in insert mode
+" NOTE: seems not work....
+function! XTermPasteBegin()
+  set pastetoggle=<Esc>[201~
+  set paste
+  return ""
+endfunction
+inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
+
+" F6 语法开关，关闭语法可以加快大文件的展示
+nnoremap <F6> :exec exists('syntax_on') ? 'syn off' : 'syn on'<CR>
+
+" map <Space> to / (search) and Ctrl-<Space> to ? (backwards search)
+map <space> /
+" 进入搜索Use sane regexes"
+nnoremap / /\v
+vnoremap / /\v
+
+" keep search pattern at the center of the screen
+nnoremap <silent> n nzz
+nnoremap <silent> N Nzz
+nnoremap <silent> * *zz
+nnoremap <silent> # #zz
+nnoremap <silent> g* g*zz
+" remove search highlight
+noremap <silent><lead>/ :nohls<CR>
+
+" switch # *
+" nnoremap # *
+" nnoremap * #
+
+" tab swtich
+map <leader>th :tabfirst<cr>
+map <leader>tl :tablast<cr>
+
+map <leader>tj :tabnext<cr>
+map <leader>tk :tabprev<cr>
+map <leader>tn :tabnext<cr>
+map <leader>tp :tabprev<cr>
+
+map <leader>te :tabedit<cr>
+map <leader>td :tabclose<cr>
+map <leader>tm :tabm<cr>
+
+" normal模式下切换到确切的tab
+noremap <leader>1 1gt
+noremap <leader>2 2gt
+noremap <leader>3 3gt
+noremap <leader>4 4gt
+noremap <leader>5 5gt
+noremap <leader>6 6gt
+noremap <leader>7 7gt
+noremap <leader>8 8gt
+noremap <leader>9 9gt
+noremap <leader>0 :tablast<cr>
+
+" new tab by Ctrl-t
+nnoremap <C-t> :tabnew<CR> 
+inoremap <C-t> <Esc>:tabnew<CR>
+
+" y& -> Y
+map Y y$
+
+" copy to sys clipboard
+vnoremap <leader>y "+y
+
+" select block
+nnoremap <leader>v V`}
+
+" kj -> <Esc> in insert mode
+inoremap kj <Esc>
+
+" speed up scrolling of the viewport slightly
+nnoremap <C-e> 2<C-e>
+nnoremap <C-y> 2<C-y>
+
+" U to <C-r> for easier redo
+nnoremap U <C-r>
+
+" quick edit/reload vimrc
+nmap <silent> <leader>ev :e &MYVIMRC<CR>
+nmap <silent> <leader>sv :so $MYVIMRC<CR>
+
+" w!! to sudo & write a file
+cmap w!! w !sudo tee >/dev/null %
+
+"===============================
+" Others
+"===============================
+" auto reload vimrc when it is modified (Windows)
+autocmd! bufwritepost _vimrc source %
+" auto reload vimrc when it is modified (Linux)
+" NOTE: .vimrc dir
+autocmd! bufwritepost .vimrc source %
+
+" auto complete for vimrc config
+" see VimTip1228
+set completeopt=longest,menu
+
+" 增强模式中的命令行自动完成操作
+set wildmenu
+" ignore compiled files
+set wildignore=*.o,*~,*.pyc,*.class
+
+" 打开自动定位到最后编辑的位置, 需要确认 .viminfo 当前用户可写
+if has("autocmd")
+    au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+endif
+
