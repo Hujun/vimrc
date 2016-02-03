@@ -9,7 +9,12 @@ let mapleader = ','
 let g:mapleader = ','
 
 syntax on
-" TODO: install bundle
+
+" install bundle
+if filereadable(expand("~/.vim/vimrc.bundles"))
+    source ~/.vim/vimrc.bundles
+endif
+
 set history=2000 
 filetype on
 " enable indent based on file type detection
@@ -205,7 +210,7 @@ set background=dark
 set t_Co=256
 
 " colorscheme solarized
-" colorscheme molokai
+colorscheme molokai
 " colorscheme desert
 
 "===============================

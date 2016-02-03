@@ -1,0 +1,408 @@
+
+" vi incompatible to avoid bug and constraints caused by old vi versions
+set nocompatible
+" required! to be turned on latter in vimrc
+filetype off
+
+"================================
+" Plugin Group Definition
+"================================
+
+if !exists('g:bundle_groups')
+    " more options: ['json', 'nginx', 'ruby', 'less', 'json', ]
+    let g:bundle=['python', 'javascript', 'golang', 'markdown', 'html', 'css']
+endif
+
+"================================
+" Vundle General Plugins 
+"================================
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+" let Vundle manage Vundle
+Plugin 'VundleVim/Vundle.vim'
+
+" syntastic for syntax check
+Plugin 'scrooloose/syntastic'
+
+" snippet auto complete
+Plugin 'SirVer/ultisnips' | Plugin 'honza/vim-snippets'
+
+" YouCompleteMe for auto complete
+Plugin 'Valloric/YouCompleteMe'
+
+" auto complete quote
+Plugin 'Raimondi/delimitMate'
+
+" auto complete html/xml tag
+Plugin 'docunext/closetag.vim'
+
+" quick comment
+" Plugin 'scrooloose/nerdcommenter'
+
+" quick remove trailing whitespaces
+" all trailing whitsapce to be highlighted in red
+" to fix whitespace errors, just call :FixWhitespace
+" use V to select lines to restrict the portion of the file that gets fixed
+Plugin 'bronson/vim-trailing-whitespace'
+
+" quick align assignments
+" Plugin 'junegunn/vim-easy-align'
+
+" quick select and edit expand region
+" press + to expand the visual selection and _ to shrink it
+Plugin 'terryma/vim-expand-region'
+
+" view airline to enhence status bar
+Plugin 'bling/vim-airline'
+
+" better looking parentheses
+" :RainbowParenthesesToggle
+" :RainbowParenthesesLoadRound
+" :RainbowParenthesesLoadSquare
+" :RainbowParenthesesLoadBraces
+" :RainbowParenthesesLoadChevrons
+" always turn on
+" au VimEnter * RainbowParenthesesToggle
+" au Syntax * RainbowParenthesesLoadRound
+" au Syntax * RainbowParenthesesLoadSquare
+" au Syntax * RainbowParenthesesLoadBraces
+" au Syntax * RainbowParenthesesLoadChevrons
+Plugin 'kien/rainbow_parentheses.vim'
+
+" nerdtree & nerdtreetabs for navigation
+Plugin 'scrooloose/nerdtree' | Plugin 'jistr/vim-nerdtree-tabs'
+
+" ctrlspace
+" Plugin 'vim-ctrlspace/vim-ctrlspace'
+
+" tagbar: a class outline viewer for vim
+" Plugin 'majutsushi/tagbar'
+
+"================================
+" Theme  Plugins  
+"================================
+
+" solarized
+" Plugin 'altercation/vim-colors-solarized'
+
+" molokai
+Plugin 'tomasr/molokai'
+
+" desert
+" Plugin 'desert-warm-256'
+
+call vundle#end()
+
+"================================
+" Plugin Settings
+"================================
+
+" syntastic {{{
+    let g:syntastic_error_symbol='>>'
+    let g:syntastic_warning_symbol='>'
+    let g:syntastic_check_on_open=1
+    let g:syntastic_check_on_wq=0
+    let g:syntastic_enable_highlighting=1
+
+    " checkers
+    " 最轻量
+    " let g:syntastic_python_checkers=['pyflakes'] " 使用pyflakes
+    " 中等
+    " error code: http://pep8.readthedocs.org/en/latest/intro.html#error-codes
+    let g:syntastic_python_checkers=['pyflakes', 'pep8'] " 使用pyflakes,速度比pylint快
+    let g:syntastic_python_pep8_args='--ignore=E501,E225,E124,E712'
+    " 重量级, 但是足够强大, 定制完成后相当个性化
+    " pylint codes: http://pylint-messages.wikidot.com/all-codes
+    " let g:syntastic_python_checkers=['pyflakes', 'pylint'] " 使用pyflakes,速度比pylint快
+    " let g:syntastic_python_checkers=['pylint'] " 使用pyflakes,速度比pylint快
+    " let g:syntastic_python_pylint_args='--disable=C0111,R0903,C0301'
+
+    " if js
+    " let g:syntastic_javascript_checkers = ['jsl', 'jshint']
+    " let g:syntastic_html_checkers=['tidy', 'jshint']
+
+    " to see error location list
+    let g:syntastic_always_populate_loc_list = 0
+    let g:syntastic_auto_loc_list = 0
+    let g:syntastic_loc_list_height = 5
+
+    function! ToggleErrors()
+        let old_last_winnr = winnr('$')
+        lclose
+        if old_last_winnr == winnr('$')
+            " Nothing was closed, open syntastic_error location panel
+            Errors
+        endif
+    endfunction
+    nnoremap <Leader>s :call ToggleErrors()<cr>
+    " nnoremap <Leader>sn :lnext<cr>
+    " nnoremap <Leader>sp :lprevious<cr>
+
+    " 修改高亮的背景色, 适应主题
+    highlight SyntasticErrorSign guifg=white guibg=black
+
+    " 禁止插件检查java
+    " thanks to @marsqing, see https://github.com/wklken/k-vim/issues/164
+    let g:syntastic_mode_map = {'mode': 'active', 'passive_filetypes': ['java'] }
+" }}}
+
+" YouCompleteMe {{{
+    "youcompleteme  默认tab  s-tab 和自动补全冲突
+    "let g:ycm_key_list_select_completion=['<c-n>']
+    let g:ycm_key_list_select_completion = ['<Down>']
+    "let g:ycm_key_list_previous_completion=['<c-p>']
+    let g:ycm_key_list_previous_completion = ['<Up>']
+    let g:ycm_complete_in_comments = 1  "在注释输入中也能补全
+    let g:ycm_complete_in_strings = 1   "在字符串输入中也能补全
+    let g:ycm_use_ultisnips_completer = 1 "提示UltiSnips
+    let g:ycm_collect_identifiers_from_comments_and_strings = 1   "注释和字符串中的文字也会被收入补全
+    let g:ycm_collect_identifiers_from_tags_files = 1
+    " 开启语法关键字补全
+    let g:ycm_seed_identifiers_with_syntax=1
+
+    "let g:ycm_seed_identifiers_with_syntax=1   "语言关键字补全, 不过python关键字都很短，所以，需要的自己打开
+
+    " 跳转到定义处, 分屏打开
+    let g:ycm_goto_buffer_command = 'horizontal-split'
+    " nnoremap <leader>jd :YcmCompleter GoToDefinition<CR>
+    nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
+    nnoremap <leader>gd :YcmCompleter GoToDeclaration<CR>
+
+    " 引入，可以补全系统，以及python的第三方包 针对新老版本YCM做了兼容
+    " old version
+    if !empty(glob("~/.vim/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py"))
+        let g:ycm_global_ycm_extra_conf = "~/.vim/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py"
+    endif
+    " new version
+    if !empty(glob("~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py"))
+        let g:ycm_global_ycm_extra_conf = "~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py"
+    endif
+
+    " 直接触发自动补全 insert模式下
+    " let g:ycm_key_invoke_completion = '<C-Space>'
+    " 黑名单,不启用
+    let g:ycm_filetype_blacklist = {
+        \ 'tagbar' : 1,
+        \ 'gitcommit' : 1,
+        \}
+" }}}
+
+
+" ultisnips {{{
+    let g:UltiSnipsExpandTrigger       = "<tab>"
+    let g:UltiSnipsJumpForwardTrigger  = "<tab>"
+    let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
+    let g:UltiSnipsSnippetDirectories  = ['UltiSnips']
+    let g:UltiSnipsSnippetsDir = '~/.vim/UltiSnips'
+    " 定义存放代码片段的文件夹 .vim/UltiSnips下，使用自定义和默认的，将会的到全局，有冲突的会提示
+    " 进入对应filetype的snippets进行编辑
+    map <leader>us :UltiSnipsEdit<CR>
+
+    " ctrl+j/k 进行选择
+    func! g:JInYCM()
+        if pumvisible()
+            return "\<C-n>"
+        else
+            return "\<c-j>"
+        endif
+    endfunction
+
+    func! g:KInYCM()
+        if pumvisible()
+            return "\<C-p>"
+        else
+            return "\<c-k>"
+        endif
+    endfunction
+    inoremap <c-j> <c-r>=g:JInYCM()<cr>
+    au BufEnter,BufRead * exec "inoremap <silent> " . g:UltiSnipsJumpBackwordTrigger . " <C-R>=g:KInYCM()<cr>"
+    let g:UltiSnipsJumpBackwordTrigger = "<c-k>"
+" }}}
+
+
+" delimitMate {{{
+    " for python docstring ",优化输入
+    au FileType python let b:delimitMate_nesting_quotes = ['"']
+    " 关闭某些类型文件的自动补全
+    "au FileType mail let b:delimitMate_autoclose = 0
+" }}}
+
+
+" closetag {{{
+    let g:closetag_html_style=1
+" }}}
+
+" nerdcommenter {{{
+    " let g:NERDSpaceDelims=1
+" }}}
+
+" trailingwhitespace {{{
+    map <leader><space> :FixWhitespace<cr>
+" }}}
+
+" easyalign {{{
+    " vmap <Leader>a <Plug>(EasyAlign)
+    " nmap <Leader>a <Plug>(EasyAlign)
+    " if !exists('g:easy_align_delimiters')
+    " let g:easy_align_delimiters = {}
+    " endif
+    " let g:easy_align_delimiters['#'] = { 'pattern': '#', 'ignore_groups': ['String'] }
+" }}}
+
+" expandregion {{{
+    map + <Plug>(expand_region_expand)
+    map _ <Plug>(expand_region_shrink)
+    " vmap v <Plug>(expand_region_expand)
+    " vmap V <Plug>(expand_region_shrink)
+    " Extend the global default
+    call expand_region#custom_text_objects({
+      \ 'a]' :1,
+      \ 'ab' :1,
+      \ 'aB' :1,
+      \ 'ii' :0,
+      \ 'ai' :0,
+      \ })
+" }}}
+
+" airline {{{
+    if !exists('g:airline_symbols')
+        let g:airline_symbols = {}
+    endif
+    let g:airline_left_sep = '▶'
+    let g:airline_left_alt_sep = '❯'
+    let g:airline_right_sep = '◀'
+    let g:airline_right_alt_sep = '❮'
+    let g:airline_symbols.linenr = '¶'
+    let g:airline_symbols.branch = '⎇'
+    " 是否打开tabline
+    " let g:airline#extensions#tabline#enabled = 1
+" }}}
+
+
+
+" rainbow_parentheses {{{
+    " 不加入这行, 防止黑色括号出现, 很难识别
+    " \ ['black',       'SeaGreen3'],
+    let g:rbpt_colorpairs = [
+        \ ['brown',       'RoyalBlue3'],
+        \ ['Darkblue',    'SeaGreen3'],
+        \ ['darkgray',    'DarkOrchid3'],
+        \ ['darkgreen',   'firebrick3'],
+        \ ['darkcyan',    'RoyalBlue3'],
+        \ ['darkred',     'SeaGreen3'],
+        \ ['darkmagenta', 'DarkOrchid3'],
+        \ ['brown',       'firebrick3'],
+        \ ['gray',        'RoyalBlue3'],
+        \ ['darkmagenta', 'DarkOrchid3'],
+        \ ['Darkblue',    'firebrick3'],
+        \ ['darkgreen',   'RoyalBlue3'],
+        \ ['darkcyan',    'SeaGreen3'],
+        \ ['darkred',     'DarkOrchid3'],
+        \ ['red',         'firebrick3'],
+        \ ]
+
+    let g:rbpt_max = 16
+    let g:rbpt_loadcmd_toggle = 0
+    au VimEnter * RainbowParenthesesToggle
+    au Syntax * RainbowParenthesesLoadRound
+    au Syntax * RainbowParenthesesLoadSquare
+    au Syntax * RainbowParenthesesLoadBraces
+" }}}
+
+" solarized {{{
+    let g:solarized_termtrans=1
+    let g:solarized_contrast="normal"
+    let g:solarized_visibility="normal"
+    " let g:solarized_termcolors=256
+" }}}
+
+" molokai {{{
+    " monokai原始背景色
+    let g:molokai_original = 1
+    let g:rehash256 = 1
+" }}}
+
+" nerdtree nerdtreetabs {{{
+    map <leader>n :NERDTreeToggle<CR>
+    let NERDTreeHighlightCursorline=1
+    let NERDTreeIgnore=[ '\.pyc$', '\.pyo$', '\.obj$', '\.o$', '\.so$', '\.egg$', '^\.git$', '^\.svn$', '^\.hg$' ]
+    "close vim if the only window left open is a NERDTree
+    autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | end
+    " s/v 分屏打开文件
+    let g:NERDTreeMapOpenSplit = 's'
+    let g:NERDTreeMapOpenVSplit = 'v'
+
+
+    " nerdtreetabs
+    map <Leader>n <plug>NERDTreeTabsToggle<CR>
+    " 关闭同步
+    let g:nerdtree_tabs_synchronize_view=0
+    let g:nerdtree_tabs_synchronize_focus=0
+    " 是否自动开启nerdtree
+    " thank to @ListenerRi, see https://github.com/wklken/k-vim/issues/165
+    let g:nerdtree_tabs_open_on_console_startup=0
+    let g:nerdtree_tabs_open_on_gui_startup=0
+" }}}
+
+
+" Vim Workspace Controller
+" ctrlspace {{{
+    " let g:airline_exclude_preview = 1
+    " hi CtrlSpaceSelected guifg=#586e75 guibg=#eee8d5 guisp=#839496 gui=reverse,bold ctermfg=10 ctermbg=7 cterm=reverse,bold
+    " hi CtrlSpaceNormal   guifg=#839496 guibg=#021B25 guisp=#839496 gui=NONE ctermfg=12 ctermbg=0 cterm=NONE
+    " hi CtrlSpaceSearch   guifg=#cb4b16 guibg=NONE gui=bold ctermfg=9 ctermbg=NONE term=bold cterm=bold
+    " hi CtrlSpaceStatus   guifg=#839496 guibg=#002b36 gui=reverse term=reverse cterm=reverse ctermfg=12 ctermbg=8
+" }}}
+
+" tagbar {{{
+    " nmap <F9> :TagbarToggle<CR>
+    " let g:tagbar_autofocus = 1
+    " " let g:tagbar_autoshowtag = 1
+    " " let g:tagbar_show_visibility = 1
+    " " for ruby
+    " let g:tagbar_type_ruby = {
+    "     \ 'kinds' : [
+    "         \ 'm:modules',
+    "         \ 'c:classes',
+    "         \ 'd:describes',
+    "         \ 'C:contexts',
+    "         \ 'f:methods',
+    "         \ 'F:singleton methods'
+    "     \ ]
+    " \ }
+
+    " " go语言的tagbar配置
+    " " 1. install gotags 'go get -u github.com/jstemmer/gotags'
+    " " 2. make sure `gotags` in you shell PATH, you can call check it with `which gotags`
+    " " for gotags. work with tagbar
+    " let g:tagbar_type_go = {
+    "     \ 'ctagstype' : 'go',
+    "     \ 'kinds'     : [
+    "         \ 'p:package',
+    "         \ 'i:imports:1',
+    "         \ 'c:constants',
+    "         \ 'v:variables',
+    "         \ 't:types',
+    "         \ 'n:interfaces',
+    "         \ 'w:fields',
+    "         \ 'e:embedded',
+    "         \ 'm:methods',
+    "         \ 'r:constructor',
+    "         \ 'f:functions'
+    "     \ ],
+    "     \ 'sro' : '.',
+    "     \ 'kind2scope' : {
+    "         \ 't' : 'ctype',
+    "         \ 'n' : 'ntype'
+    "     \ },
+    "     \ 'scope2kind' : {
+    "         \ 'ctype' : 't',
+    "         \ 'ntype' : 'n'
+    "     \ },
+    "     \ 'ctagsbin'  : 'gotags',
+    "     \ 'ctagsargs' : '-sort -silent'
+    " \ }
+" }}}
