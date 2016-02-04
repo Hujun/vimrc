@@ -42,7 +42,9 @@ npm install -g jslint
 # mac
 brew update
 brew install vim
-echo "alias vim='/usr/local/bin/vim'" >> ~/.profile && source ~/.profile
+echo "alias vim='/usr/local/bin/vim'" >> ~/.profile
+echo "alias vi='/usr/local/bin/vim'" >> ~/.profile
+source ~/.profile
 ```
 
 ### 3. Install
