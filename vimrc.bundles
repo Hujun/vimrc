@@ -40,7 +40,8 @@ Plugin 'Raimondi/delimitMate'
 Plugin 'docunext/closetag.vim'
 
 " quick comment
-" Plugin 'scrooloose/nerdcommenter'
+" most common usage is [count]<leader>cc
+Plugin 'scrooloose/nerdcommenter'
 
 " quick remove trailing whitespaces
 " all trailing whitsapce to be highlighted in red
@@ -241,7 +242,7 @@ call vundle#end()
 " }}}
 
 " nerdcommenter {{{
-    " let g:NERDSpaceDelims=1
+    let g:NERDSpaceDelims=1
 " }}}
 
 " trailingwhitespace {{{
@@ -431,4 +432,6 @@ call vundle#end()
     let g:gitgutter_enabled = 0
     let g:gitgutter_highlight_lines = 1
     nnoremap <leader>gs :GitGutterToggle<CR>
+    nnoremap <leader>nh :GitGutterNextHunk<CR>
+    nnoremap <leader>ph :GitGutterPrevHunk<CR>
 " }}}
