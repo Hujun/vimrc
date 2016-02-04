@@ -495,7 +495,8 @@ call vundle#end()
     nnoremap <leader>gb :Gblame<CR>
     " conflict with gitgutter hotkey
     " nnoremap <leader>gs :Gstatus<CR>
-    nnoremap <leader>gd :Gdiff<CR>
+    " conflict with YCM hotkey
+    " nnoremap <leader>gd :Gdiff<CR>
     " nnoremap <leader>gl :Glog<CR>
     nnoremap <leader>gc :Gcommit<CR>
     nnoremap <leader>gp :Git push<CR>
@@ -543,7 +544,7 @@ call vundle#end()
 
     let g:ctrlp_extensions = ['funky']
 " }}}
-
+ 
 "====================================
 " Language Specified Plugin Settings
 "====================================
