@@ -15,7 +15,7 @@ if filereadable(expand("~/.vim/vimrc.bundles"))
     source ~/.vim/vimrc.bundles
 endif
 
-set history=2000 
+set history=2000
 filetype on
 " enable indent based on file type detection
 filetype indent on
@@ -52,6 +52,9 @@ set t_ti= t_te=
 " Configure backspace so it acts as it should act
 set backspace=eol,start,indent
 set whichwrap+=<,>,h,l
+
+" auto switch pwd to current dir except that it is /tmp
+autocmd BufEnter * if expand("%:p:h") !~ '^/tmp' | silent! lcd %:p:h | endif
 
 "================================
 " Display Settings
@@ -175,7 +178,7 @@ autocmd BufRead,BufNewFile *.md,*.mkd,*.markdown set filetype=markdown.mkd
 autocmd BufRead,BufNewFile *.part set filetype=html
 
 " 定义函数AutoSetFileHead，自动插入文件头
-" autocmd BufNewFile *.sh,*.py exec ":call AutoSetFileHead()"
+autocmd BufNewFile *.sh,*.py exec ":call AutoSetFileHead()"
 function! AutoSetFileHead()
     " 如果文件类型为.sh文件
     if &filetype == 'sh'
@@ -229,8 +232,8 @@ nnoremap gj j
 " smart way to move between windows
 map <C-j> <C-W>j
 map <C-k> <C-W>k
-map <C-h> <C-W>h 
-map <C-l> <C-W>l 
+map <C-h> <C-W>h
+map <C-l> <C-W>l
 
 " easy way to go to start and end of line
 noremap H ^
@@ -332,7 +335,7 @@ noremap <leader>9 9gt
 noremap <leader>0 :tablast<cr>
 
 " new tab by Ctrl-t
-nnoremap <C-t> :tabnew<CR> 
+nnoremap <C-t> :tabnew<CR>
 inoremap <C-t> <Esc>:tabnew<CR>
 
 " y& -> Y
