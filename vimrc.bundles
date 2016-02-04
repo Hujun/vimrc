@@ -9,8 +9,8 @@ filetype off
 "================================
 
 if !exists('g:bundle_groups')
-    " more options: ['json', 'nginx', 'ruby', 'less', 'json', ]
-    let g:bundle=['python', 'javascript', 'golang', 'markdown', 'html', 'css']
+    " more options: ['nginx', 'ruby', 'less']
+    let g:bundle_groups=['python', 'javascript', 'golang', 'markdown', 'html', 'css', 'json']
 endif
 
 "================================
@@ -91,6 +91,79 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'ctrlpvim/ctrlp.vim' | Plugin 'tacahiroy/ctrlp-funky'
 
 "================================
+" Language Specified Plugins
+"================================
+
+if count(g:bundle_groups, 'python')
+    " python syntax
+    Plugin 'hdima/python-syntax'
+    Plugin 'hynek/vim-python-pep8-indent'
+    Plugin 'Glench/Vim-Jinja2-Syntax'
+endif
+
+if count(g:bundle_groups, 'markdown')
+    Plugin 'plasticboy/vim-markdown', {'for': 'md'}
+    " https://github.com/suan/vim-instant-markdown
+    " npm -g install instant-markdown-d
+    " Plugin 'suan/vim-instant-markdown'
+    " let g:instant_markdown_slow = 1
+    " let g:instant_markdown_autostart = 0
+    " map <F12> :InstantMarkdownPreview<CR>
+endif
+
+if count(g:bundle_groups, 'golang')
+    " 1. vim a.go
+    " 2. :GoInstallBinaries
+    " vimgo
+    Plugin 'fatih/vim-go', {'for': 'go'}
+endif
+
+if count(g:bundle_groups, 'javascript')
+    " javascript
+    " 注意: syntax这个插件要放前面
+    Plugin 'othree/yajs.vim' | Plugin 'pangloss/vim-javascript'
+    " Plugin 'jelera/vim-javascript-syntax' | Plugin 'pangloss/vim-javascript'
+
+    " TODO: jquery? for, remove or keep
+    Plugin 'othree/javascript-libraries-syntax.vim'
+    let g:used_javascript_libs = 'jquery,underscore,backbone'
+
+    " for javascript 自动补全, 配合YCM, 需要安装全局环境的（非nvm中) node.js&npm
+    " 安装完成后还需要在 bundle/tern_for_vim 下执行 npm install 安装依赖
+    " see https://github.com/marijnh/tern_for_vim
+    " Plugin 'marijnh/tern_for_vim'
+endif
+
+if count(g:bundle_groups, 'json')
+    " json
+    Plugin 'elzr/vim-json', {'for': 'json'}
+endif
+
+if count(g:bundle_groups, 'css')
+    " css
+    " not work in iterm2 which termianl selection is not xterm-256, and it slow
+    " Plugin 'ap/vim-css-color'
+
+    " 这个有坑, see issue https://github.com/wklken/k-vim/issues/49
+    " Plugin 'gorodinskiy/vim-coloresque'
+endif
+
+if count(g:bundle_groups, 'less')
+    " ###### vim.less : less 自动更新##########
+    " Plugin 'groenewege/vim-less'
+    " autocmd BufWritePost *.less :!lessc % > %:p:r.css
+endif
+
+if count(g:bundle_groups, 'html')
+    " ###### emmet HTML complete #########
+    " Plugin "mattn/emmet-vim"
+endif
+
+if count(g:bundle_groups, 'nginx')
+    " Plugin 'evanmiller/nginx-vim-syntax'
+endif
+
+"================================
 " Theme  Plugins
 "================================
 
@@ -106,7 +179,7 @@ Plugin 'tomasr/molokai'
 call vundle#end()
 
 "================================
-" Plugin Settings
+" General Plugin Settings
 "================================
 
 " syntastic {{{
@@ -147,8 +220,8 @@ call vundle#end()
         endif
     endfunction
     nnoremap <Leader>s :call ToggleErrors()<cr>
-    " nnoremap <Leader>sn :lnext<cr>
-    " nnoremap <Leader>sp :lprevious<cr>
+    nnoremap <Leader>sn :lnext<cr>
+    nnoremap <Leader>sp :lprevious<cr>
 
     " 修改高亮的背景色, 适应主题
     highlight SyntasticErrorSign guifg=white guibg=black
@@ -469,4 +542,40 @@ call vundle#end()
     let g:ctrlp_funky_syntax_highlight = 1
 
     let g:ctrlp_extensions = ['funky']
+" }}}
+
+"====================================
+" Language Specified Plugin Settings
+"====================================
+
+" pythonsyntax {{{
+    let python_highlight_all = 1
+" }}}
+
+" vimgo {{{
+    let g:go_highlight_functions = 1
+    let g:go_highlight_methods = 1
+    let g:go_highlight_structs = 1
+    let g:go_highlight_operators = 1
+    let g:go_highlight_build_constraints = 1
+
+    let g:go_fmt_fail_silently = 1
+    " let g:go_fmt_command = "goimports"
+    " let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
+" }}}
+
+" markdown {{{
+    let g:vim_markdown_folding_disabled=1
+" }}}
+
+
+" javascript {{{
+    " pangloss/vim-javascript
+    let g:html_indent_inctags = "html,body,head,tbody"
+    let g:html_indent_script1 = "inc"
+    let g:html_indent_style1 = "inc"
+" }}}
+
+" json {{{
+    let g:vim_json_syntax_conceal = 0
 " }}}
