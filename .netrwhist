@@ -1,6 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =4
-let g:netrw_dirhist_1='/Users/hujun/Projects/cenarius/cenarius'
-let g:netrw_dirhist_2='/Users/hujun/Projects/cenarius/cenarius/modules'
-let g:netrw_dirhist_3='/Users/hujun/Projects/cenarius/cenarius'
-let g:netrw_dirhist_4='/Users/hujun/Projects/cenarius/cenarius/api'
