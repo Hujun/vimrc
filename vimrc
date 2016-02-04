@@ -11,8 +11,8 @@ let g:mapleader = ','
 syntax on
 
 " install bundle
-if filereadable(expand("~/.vim/vimrc.bundles"))
-    source ~/.vim/vimrc.bundles
+if filereadable(expand("~/.vimrc.bundles"))
+    source ~/.vimrc.bundles
 endif
 
 set history=2000
