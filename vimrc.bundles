@@ -81,6 +81,9 @@ Plugin 'scrooloose/nerdtree' | Plugin 'jistr/vim-nerdtree-tabs'
 " tagbar: a class outline viewer for vim
 " Plugin 'majutsushi/tagbar'
 
+" easy git command in vim
+Plugin 'tpope/vim-fugitive'
+
 "================================
 " Theme  Plugins
 "================================
@@ -406,4 +409,14 @@ call vundle#end()
     "     \ 'ctagsbin'  : 'gotags',
     "     \ 'ctagsargs' : '-sort -silent'
     " \ }
+" }}}
+
+" fugitive {{{
+    " :Gdiff  :Gstatus :Gvsplit
+    nnoremap <leader>gb :Gblame<CR>
+    nnoremap <leader>gs :Gstatus<CR>
+    nnoremap <leader>gd :Gdiff<CR>
+    nnoremap <leader>gl :Glog<CR>
+    nnoremap <leader>gc :Gcommit<CR>
+    nnoremap <leader>gp :Git push<CR>
 " }}}
