@@ -83,6 +83,8 @@ Plugin 'scrooloose/nerdtree' | Plugin 'jistr/vim-nerdtree-tabs'
 
 " easy git command in vim
 Plugin 'tpope/vim-fugitive'
+" sign modified lines
+Plugin 'airblade/vim-gitgutter'
 
 "================================
 " Theme  Plugins
@@ -414,9 +416,19 @@ call vundle#end()
 " fugitive {{{
     " :Gdiff  :Gstatus :Gvsplit
     nnoremap <leader>gb :Gblame<CR>
-    nnoremap <leader>gs :Gstatus<CR>
+    " conflict with gitgutter hotkey
+    " nnoremap <leader>gs :Gstatus<CR>
     nnoremap <leader>gd :Gdiff<CR>
-    nnoremap <leader>gl :Glog<CR>
+    " nnoremap <leader>gl :Glog<CR>
     nnoremap <leader>gc :Gcommit<CR>
     nnoremap <leader>gp :Git push<CR>
+" }}}
+
+" gitgutter {{{
+    " 同git diff,实时展示文件中修改的行
+    " 默认关闭,gs时打开
+    let g:gitgutter_map_keys = 0
+    let g:gitgutter_enabled = 0
+    let g:gitgutter_highlight_lines = 1
+    nnoremap <leader>gs :GitGutterToggle<CR>
 " }}}
