@@ -57,3 +57,38 @@ source ~/.profile
 cd ~/.vim
 sh -x install.sh
 ```
+
+## Programming Language Features
+
+### Python3
+
+Install pyflakes:
+
+```bash
+pip3 install pyflakes
+```
+
+Add in the end of `vimrc`:
+
+```
+let g:syntastic_python_pyflakes_exe = 'python3 -m pyflakes'
+```
+
+## Neovim support
+
+### 1. Install Neovim
+
+```bash
+brew install neovim
+# Python2 plugins
+pip2 install -U neovim
+# Python3 plugins
+pip3 install -U neovim
+```
+
+### 2. Share config with Vim
+
+```bash
+ln -s ~/.vim ~/.config/nvim
+ln -s ~/.vimrc ~/.config/nvim/init.vim
+```
